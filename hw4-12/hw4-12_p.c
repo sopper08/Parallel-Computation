@@ -3,7 +3,7 @@
 #include "mpi.h"
 #include "MyMPI.h"
 
-#define n 1000000
+#define n 50
 
 double f(int i){
 	double x;
@@ -16,9 +16,11 @@ int main(int argc, char* argv[]){
 	int id, p;
 	int i;
 	double area, whole_area;
+	double elapsed_time;	
 
 	MPI_Init(&argc,&argv);
 	MPI_Barrier(MPI_COMM_WORLD);
+	elapsed_time = -MPI_Wtime();
 	MPI_Comm_rank(MPI_COMM_WORLD,&id);
 	MPI_Comm_size(MPI_COMM_WORLD,&p);
 
@@ -30,7 +32,11 @@ int main(int argc, char* argv[]){
 		area+=4.0*f(2*i-1)+2*f(2*i);
 	area/=(3.0*n);
 	MPI_Reduce(&area,&whole_area,1,MPI_DOUBLE,MPI_SUM,0,MPI_COMM_WORLD);
-	if(!id)
+	elapsed_time += MPI_Wtime();
+	MPI_Finalize();
+	if(!id){
 		printf("Approximation of pi: %13.11f\n",whole_area);
+		printf("Execution time     : %13.11f\n",elapsed_time);
+	}
 	return 0;
 }
