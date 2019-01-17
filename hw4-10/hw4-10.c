@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
 
 	int **array = (int**)malloc(sizeof(int*)*n / numproc);
 	for (int i = 0; i != n / numproc; i++) {
-		array[i] = (int*)malloc(sizeof(int) * 6); //•ãšµdata”³’ù”ì’ö—ú§F””šmŸ7ž 
+		array[i] = (int*)malloc(sizeof(int) * 6);
 	}
 
 	lowvalue = numstart + Block_low(id, numproc, n);
